@@ -1,11 +1,12 @@
 # To-Do List API
 
-API REST para criação e acompanhamento de tarefas, desenvolvida em Python com FastAPI. Permite criar, listar, consultar, atualizar e remover tarefas, com validação dos dados e tratamento de erros.
+API REST para criação e acompanhamento de tarefas, desenvolvida em Python com FastAPI. Permite criar, listar, consultar, atualizar e remover tarefas, com validação dos dados e tratamento de erros. Os dados são persistidos em um banco SQLite.
 
 ## Tecnologias
 - Python
 - FastAPI
 - Pydantic (validação de dados)
+- SQLAlchemy e SQLite (persistência)
 - Uvicorn (servidor)
 
 ## Como rodar
@@ -19,7 +20,7 @@ pip install -r requirements.txt
 python -m uvicorn main:app --reload
 ```
 
-A API ficará disponível em `http://127.0.0.1:8000`.
+A API ficará disponível em `http://127.0.0.1:8000`. O banco `tarefas.db` é criado automaticamente na primeira execução.
 
 > No Linux/macOS, ative o ambiente com `source venv/bin/activate`.
 
@@ -42,6 +43,5 @@ O FastAPI gera automaticamente uma documentação interativa (Swagger). Com o se
 ![Swagger](docs.png)
 
 ## Próximos passos
-- Persistência dos dados com SQLite e SQLAlchemy
 - Testes automatizados com pytest
 - Novos campos nas tarefas (prazo, prioridade, grupos)
