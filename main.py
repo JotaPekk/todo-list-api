@@ -1,8 +1,11 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
-app = FastAPI()
-
+app = FastAPI(
+    title="To-Do List API",
+    description="API REST para criação e acompanhamento de tarefas.",
+    version="1.0.0",
+)
 class Tarefa(BaseModel):
     titulo: str
     descricao: str = ""
