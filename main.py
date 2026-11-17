@@ -29,38 +29,41 @@ tarefas = []
 proximo_id = 1
 
 
-def encontrar_tarefa(tarefa_id: int):
-    for tarefa in tarefas:
-        if tarefa["id"] == tarefa_id:
-            return tarefa
-    raise HTTPException(status_code=404, detail="Tarefa não encontrada")
+def encontrar_tarefa(tarefa_id: int, db: Session):
+    tarefa = db.query(models.TarefaDB).filter(models.TarefaDB.id == tarefa_id).first()
+    if tarefa is None:
+        raise HTTPException(status_code=404, detail="Tarefa não encontrada")
+    return tarefa
 
 
 @app.get("/tarefas")
-def listar_tarefas():
-    return tarefas
+def listar_tarefas(db: Session = Depends(get_db)):
+    return db.query(models.TarefaDB).all()
 
 @app.get("/tarefas/{tarefa_id}")
-def buscar_tarefa(tarefa_id: int):
-    return encontrar_tarefa(tarefa_id)
+def buscar_tarefa(tarefa_id: int, db: Session = Depends(get_db)):
+    return encontrar_tarefa(tarefa_id, db)
 
 @app.post("/tarefas")
-def criar_tarefa(tarefa: Tarefa):
-    global proximo_id
-    tarefa_dict = tarefa.model_dump()
-    tarefa_dict["id"] = proximo_id
-    proximo_id += 1
-    tarefas.append(tarefa_dict)
-    return tarefa_dict
+def criar_tarefa(tarefa: Tarefa, db: Session = Depends(get_db)):
+    nova = models.TarefaDB(**tarefa.model_dump())
+    db.add(nova)
+    db.commit()
+    db.refresh(nova)
+    return nova
 
 @app.put("/tarefas/{tarefa_id}")
-def atualizar_tarefa(tarefa_id: int, dados: Tarefa):
-    tarefa = encontrar_tarefa(tarefa_id)
-    tarefa.update(dados.model_dump())
+def atualizar_tarefa(tarefa_id: int, dados: Tarefa, db: Session = Depends(get_db)):
+    tarefa = encontrar_tarefa(tarefa_id, db)
+    for campo, valor in dados.model_dump().items():
+        setattr(tarefa, campo, valor)
+    db.commit()
+    db.refresh(tarefa)
     return tarefa
 
 @app.delete("/tarefas/{tarefa_id}")
-def remover_tarefa(tarefa_id: int):
-    tarefa = encontrar_tarefa(tarefa_id)
-    tarefas.remove(tarefa)
+def remover_tarefa(tarefa_id: int, db: Session = Depends(get_db)):
+    tarefa = encontrar_tarefa(tarefa_id, db)
+    db.delete(tarefa)
+    db.commit()
     return {"mensagem": "Tarefa removida com sucesso"}
