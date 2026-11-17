@@ -1,11 +1,25 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
+from sqlalchemy.orm import Session
+
+import models
+import database
 
 app = FastAPI(
     title="To-Do List API",
     description="API REST para criação e acompanhamento de tarefas.",
-    version="1.0.0",
-)
+    version="1.0.0",)
+
+models.Base.metadata.create_all(bind=database.engine)
+
+def get_db():
+    db = database.SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
 class Tarefa(BaseModel):
     titulo: str
     descricao: str = ""
