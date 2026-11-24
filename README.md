@@ -32,6 +32,7 @@ A API ficará disponível em `http://127.0.0.1:8000`. O banco `tarefas.db` é cr
 | GET | /tarefas/{id} | Busca uma tarefa pelo id |
 | POST | /tarefas | Cria uma nova tarefa |
 | PUT | /tarefas/{id} | Atualiza uma tarefa existente |
+| PATCH | /tarefas/{id} | Atualiza parcialmente uma tarefa |
 | DELETE | /tarefas/{id} | Remove uma tarefa |
 
 Ids inexistentes retornam erro 404 e dados inválidos retornam erro 422.
