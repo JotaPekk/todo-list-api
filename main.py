@@ -25,8 +25,10 @@ class Tarefa(BaseModel):
     descricao: str = ""
     concluida: bool = False
 
-tarefas = []
-proximo_id = 1
+class TarefaAtualizar(BaseModel):
+    titulo: str | None = None
+    descricao: str | None = None
+    concluida: bool | None = None
 
 
 def encontrar_tarefa(tarefa_id: int, db: Session):
@@ -56,6 +58,15 @@ def criar_tarefa(tarefa: Tarefa, db: Session = Depends(get_db)):
 def atualizar_tarefa(tarefa_id: int, dados: Tarefa, db: Session = Depends(get_db)):
     tarefa = encontrar_tarefa(tarefa_id, db)
     for campo, valor in dados.model_dump().items():
+        setattr(tarefa, campo, valor)
+    db.commit()
+    db.refresh(tarefa)
+    return tarefa
+
+@app.patch("/tarefas/{tarefa_id}")
+def atualizar_parcial(tarefa_id: int, dados: TarefaAtualizar, db: Session = Depends(get_db)):
+    tarefa = encontrar_tarefa(tarefa_id, db)
+    for campo, valor in dados.model_dump(exclude_unset=True).items():
         setattr(tarefa, campo, valor)
     db.commit()
     db.refresh(tarefa)
