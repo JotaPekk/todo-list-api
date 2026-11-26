@@ -1,9 +1,10 @@
 from fastapi import FastAPI, HTTPException, Depends
+from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 
-import schemas
-import models
 import database
+import models
+import schemas
 
 app = FastAPI(
     title="To-Do List API",
@@ -35,6 +36,11 @@ def aplicar_alteracoes(tarefa, dados: dict, db: Session):
     db.commit()
     db.refresh(tarefa)
     return tarefa
+
+
+@app.get("/", include_in_schema=False)
+def raiz():
+    return RedirectResponse(url="/docs")
 
 
 @app.get("/tarefas")

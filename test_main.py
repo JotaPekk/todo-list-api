@@ -137,3 +137,9 @@ def test_delete_duas_vezes(client):
     assert resposta.json()["mensagem"] == "Tarefa removida com sucesso"
     resposta2 = client.delete("/tarefas/1")
     assert resposta2.status_code == 404
+
+
+def test_raiz_redireciona_para_docs(client):
+    resposta = client.get("/", follow_redirects=False)
+    assert resposta.status_code == 307
+    assert resposta.headers["location"] == "/docs"
