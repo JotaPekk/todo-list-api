@@ -8,6 +8,7 @@ API REST para criação e acompanhamento de tarefas, desenvolvida em Python com 
 - Pydantic (validação de dados)
 - SQLAlchemy e SQLite (persistência)
 - Uvicorn (servidor)
+- Pytest (testes automatizados)
 
 ## Como rodar
 
@@ -31,8 +32,8 @@ A API ficará disponível em `http://127.0.0.1:8000`. O banco `tarefas.db` é cr
 | GET | /tarefas | Lista todas as tarefas |
 | GET | /tarefas/{id} | Busca uma tarefa pelo id |
 | POST | /tarefas | Cria uma nova tarefa |
-| PUT | /tarefas/{id} | Atualiza uma tarefa existente |
-| PATCH | /tarefas/{id} | Atualiza parcialmente uma tarefa |
+| PUT | /tarefas/{id} | Substitui uma tarefa (todos os campos) |
+| PATCH | /tarefas/{id} | Atualiza só os campos enviados |
 | DELETE | /tarefas/{id} | Remove uma tarefa |
 
 Ids inexistentes retornam erro 404 e dados inválidos retornam erro 422.
@@ -43,6 +44,13 @@ O FastAPI gera automaticamente uma documentação interativa (Swagger). Com o se
 
 ![Swagger](docs.png)
 
+## Testes
+
+```bash
+python -m pytest -v
+```
+
+Os testes usam um banco SQLite em memória, separado do `tarefas.db`.
+
 ## Próximos passos
-- Testes automatizados com pytest
 - Novos campos nas tarefas (prazo, prioridade, grupos)

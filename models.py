@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Boolean
 from database import Base
 
+
 class TarefaDB(Base):
     __tablename__ = "tarefas"
 

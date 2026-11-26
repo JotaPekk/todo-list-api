@@ -1,7 +1,6 @@
 from fastapi import FastAPI, HTTPException, Depends
 from sqlalchemy.orm import Session
 
-
 import schemas
 import models
 import database
@@ -58,7 +57,7 @@ def criar_tarefa(tarefa: schemas.Tarefa, db: Session = Depends(get_db)):
 
 
 @app.put("/tarefas/{tarefa_id}")
-def atualizar_tarefa(tarefa_id: int, dados: schemas.TarefaAtualizar, db: Session = Depends(get_db)):
+def atualizar_tarefa(tarefa_id: int, dados: schemas.Tarefa, db: Session = Depends(get_db)):
     tarefa = encontrar_tarefa(tarefa_id, db)
     return aplicar_alteracoes(tarefa, dados.model_dump(), db)
 
