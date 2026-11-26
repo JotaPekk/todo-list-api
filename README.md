@@ -2,6 +2,10 @@
 
 API REST para criação e acompanhamento de tarefas, desenvolvida em Python com FastAPI. Permite criar, listar, consultar, atualizar e remover tarefas, com validação dos dados e tratamento de erros. Os dados são persistidos em um banco SQLite.
 
+**Demonstração online:** https://todo-list-api-mnx5.onrender.com (abre direto na documentação interativa)
+
+> A versão publicada roda no plano gratuito do Render: a primeira requisição pode demorar alguns segundos para o serviço "acordar", e os dados não são permanentes (o banco é recriado a cada reinício ou novo deploy).
+
 ## Tecnologias
 - Python
 - FastAPI
@@ -9,6 +13,7 @@ API REST para criação e acompanhamento de tarefas, desenvolvida em Python com 
 - SQLAlchemy e SQLite (persistência)
 - Uvicorn (servidor)
 - Pytest (testes automatizados)
+- Render (deploy)
 
 ## Como rodar
 
@@ -40,7 +45,7 @@ Ids inexistentes retornam erro 404 e dados inválidos retornam erro 422.
 
 ## Documentação
 
-O FastAPI gera automaticamente uma documentação interativa (Swagger). Com o servidor rodando, acesse `http://127.0.0.1:8000/docs` para testar as rotas pelo navegador.
+O FastAPI gera automaticamente uma documentação interativa (Swagger). Com o servidor rodando, acesse `http://127.0.0.1:8000/docs` para testar as rotas pelo navegador. Na versão online, a página inicial já redireciona para ela.
 
 ![Swagger](docs.png)
 
@@ -50,7 +55,8 @@ O FastAPI gera automaticamente uma documentação interativa (Swagger). Com o se
 python -m pytest -v
 ```
 
-Os testes usam um banco SQLite em memória, separado do `tarefas.db`.
+A suíte cobre todas as rotas, incluindo os casos de erro (404 e 422). Os testes usam um banco SQLite em memória, separado do `tarefas.db`.
 
 ## Próximos passos
 - Novos campos nas tarefas (prazo, prioridade, grupos)
+- Banco de dados persistente na versão publicada (PostgreSQL)
